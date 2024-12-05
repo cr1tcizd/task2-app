@@ -1,0 +1,31 @@
+.header {
+	padding: 20px;
+	background: #edeeed;
+}
+
+.main {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 24px;
+	padding: 40px 0;
+}
+
+.main_img {
+	max-width: 400px;
+	width: 100%;
+}
+
+.main_title {
+	font-size: 32px;
+}
+
+.main_priceContainer {
+	display: flex;
+	gap: 12px;
+}
+
+.main_priceContainer_line {
+	text-decoration: line-through;
+}
