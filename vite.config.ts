@@ -6,6 +6,7 @@ import path from 'path'
 // https://vite.dev/config/
 export default defineConfig({
 	plugins: [svgr(), react()],
+	base: '/task2-app',
 	resolve: {
 		alias: {
 			app: path.resolve(__dirname, 'src/app'),
