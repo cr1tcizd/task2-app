@@ -21,7 +21,7 @@ export default function Card({
 }: CardProps) {
 	return (
 		<div className={cls.card} {...props}>
-			<img src={gameImg} alt='' />
+			<img className={cls.img} src={gameImg} alt='' />
 			<strong className={cls.heading}>{gameName}</strong>
 			<div className={cls.btn_container}>
 				<Button onClick={handleDelete}>Удалить</Button>

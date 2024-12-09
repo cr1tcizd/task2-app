@@ -1,5 +1,6 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ICard } from 'app/types/ICard'
+import { FormValues } from 'pages/create-product/ui/CreateProduct'
 
 export const fetchCards = createAsyncThunk(
 	'cards/fetchCards',
@@ -42,6 +43,8 @@ interface CardsState {
 	loading: boolean
 	error: string | null
 	tab: Tab
+	currentPage: number
+	maxPage: number
 }
 
 const initialState: CardsState = {
@@ -50,13 +53,15 @@ const initialState: CardsState = {
 	error: null,
 	tab: Tab.ALL,
 	search: '',
+	currentPage: 1,
+	maxPage: 10,
 }
 
 export const cardsSlice = createSlice({
 	name: 'cards',
 	initialState,
 	reducers: {
-		setLike: (state, action) => {
+		setLike: (state, action: PayloadAction<string>) => {
 			const cardId = action.payload
 			const card = state.cards.find(c => c.gameID === cardId)
 			if (card) {
@@ -67,15 +72,22 @@ export const cardsSlice = createSlice({
 				saveToLocalStorage(state.cards)
 			}
 		},
-		setTab: (state, action) => {
+		setTab: (state, action: PayloadAction<Tab>) => {
 			state.tab = action.payload === state.tab ? Tab.ALL : action.payload
 		},
-		deleteCard: (state, action) => {
+		deleteCard: (state, action: PayloadAction<string>) => {
 			state.cards = state.cards.filter(c => c.gameID !== action.payload)
 			saveToLocalStorage(state.cards)
 		},
-		setSearch: (state, action) => {
+		setSearch: (state, action: PayloadAction<string>) => {
 			state.search = action.payload
+		},
+		addCard: (state, action: PayloadAction<FormValues>) => {
+			state.cards = [...state.cards, action.payload]
+			saveToLocalStorage(state.cards)
+		},
+		setCurrentPage: (state, action) => {
+			state.currentPage = action.payload
 		},
 	},
 	extraReducers: builder => {
@@ -96,6 +108,13 @@ export const cardsSlice = createSlice({
 	},
 })
 
-export const { setLike, setTab, deleteCard, setSearch } = cardsSlice.actions
+export const {
+	setLike,
+	setTab,
+	deleteCard,
+	setSearch,
+	addCard,
+	setCurrentPage,
+} = cardsSlice.actions
 // export const selectCards = (state: RootState) => state.cards.value
 export default cardsSlice.reducer

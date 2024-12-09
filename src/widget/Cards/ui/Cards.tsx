@@ -7,13 +7,20 @@ import { useNavigate } from 'react-router'
 
 export default function Cards() {
 	const dispatch = useAppDispatch()
-	const { cards, loading, tab, search } = useAppSelector(state => state.cards)
+	const { cards, loading, tab, search, currentPage } = useAppSelector(
+		state => state.cards
+	)
 	const navigate = useNavigate()
 	const filter = tab === Tab.FAVORITE ? cards.filter(c => c.liked) : cards
 	const filteredCards = filter.filter(c =>
 		c.title.toLowerCase().includes(search.toLowerCase())
 	)
-	console.log(search)
+	const lastIndex = currentPage * 10
+	const firstIndex = lastIndex - 10
+	const currentCards = filteredCards.slice(firstIndex, lastIndex)
+
+	useEffect(() => {}, [filteredCards])
+
 	useEffect(() => {
 		if (cards.length === 0) {
 			dispatch(fetchCards())
@@ -36,7 +43,7 @@ export default function Cards() {
 
 	return (
 		<div className={cls.cards}>
-			{filteredCards.map(game => (
+			{currentCards.map(game => (
 				<Card
 					onClick={() => navigate(game.gameID)}
 					key={game.gameID}
